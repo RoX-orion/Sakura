@@ -3,7 +3,8 @@
     <transition name="fade-transform" mode="out-in">
       <div>
         <router-view :key="key" />
-        <GithubCorner />
+        <GithubCorner v-if="fixedHeader" class="github-corner-fixed-header"/>
+        <GithubCorner v-else class="github-corner"/>
       </div>
     </transition>
   </section>
@@ -11,6 +12,9 @@
 
 <script>
 import GithubCorner from '@/components/GithubCorner'
+import defaultSettings from '@/settings'
+
+const { fixedHeader } = defaultSettings
 
 export default {
   name: 'AppMain',
@@ -20,6 +24,9 @@ export default {
   computed: {
     key() {
       return this.$route.path
+    },
+    fixedHeader() {
+      return this.$store.state.settings.fixedHeader
     }
   }
 }
@@ -46,11 +53,15 @@ export default {
   }
 }
 .github-corner {
-    position: absolute;
-    top: 0px;
-    border: 0;
-    right: 0;
-  }
+  position: absolute;
+  top: 0px;
+  right: 0;
+}
+.github-corner-fixed-header {
+  position: absolute;
+  top: 50px;
+  right: 0;
+}
 </style>
 
 <style lang="scss">

@@ -9,11 +9,6 @@
       </div>
 
       <div class="drawer-item">
-        <span>开启 Tags-View</span>
-        <el-switch v-model="tagsView" class="drawer-switch" />
-      </div>
-
-      <div class="drawer-item">
         <span>固定 Header</span>
         <el-switch v-model="fixedHeader" class="drawer-switch" />
       </div>
@@ -50,17 +45,17 @@ export default {
         })
       }
     },
-    tagsView: {
-      get() {
-        return this.$store.state.settings.tagsView
-      },
-      set(val) {
-        this.$store.dispatch('settings/changeSetting', {
-          key: 'tagsView',
-          value: val
-        })
-      }
-    },
+    // tagsView: {
+    //   get() {
+    //     return this.$store.state.settings.tagsView
+    //   },
+    //   set(val) {
+    //     this.$store.dispatch('settings/changeSetting', {
+    //       key: 'tagsView',
+    //       value: val
+    //     })
+    //   }
+    // },
     sidebarLogo: {
       get() {
         return this.$store.state.settings.sidebarLogo
@@ -72,20 +67,20 @@ export default {
         })
       }
     },
-    supportPinyinSearch: {
-      get() {
-        return this.$store.state.settings.supportPinyinSearch
-      },
-      set(val) {
-        this.$store.dispatch('settings/changeSetting', {
-          key: 'supportPinyinSearch',
-          value: val
-        })
-      }
-    },
-    lang() {
-      return this.$store.getters.language
-    }
+    // supportPinyinSearch: {
+    //   get() {
+    //     return this.$store.state.settings.supportPinyinSearch
+    //   },
+    //   set(val) {
+    //     this.$store.dispatch('settings/changeSetting', {
+    //       key: 'supportPinyinSearch',
+    //       value: val
+    //     })
+    //   }
+    // },
+    // lang() {
+    //   return this.$store.getters.language
+    // }
   },
   methods: {
     themeChange(val) {
