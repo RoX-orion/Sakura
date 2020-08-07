@@ -7,13 +7,19 @@
     <div class="user-profile">
       <div class="box-center">
         <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
-          <div>Hello</div>
+          <div style="margin-bottom: 8px">Hello</div>
           {{ user.role }}
         </pan-thumb>
+        
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
-        <div class="user-role text-center text-muted">{{ user.role}}</div>
+        <!-- <div class="user-role text-center text-muted"></div> -->
+        <div>
+          <el-button type="primary" icon="el-icon-upload" style="position: absolute;bottom: 15px;margin-left: 40px;" @click="imagecropperShow=true">
+            更换头像
+          </el-button>
+        </div>
       </div>
     </div>
 
@@ -22,7 +28,7 @@
         <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>角色</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
-            网站管理员
+            {{ user.role}}
           </div>
         </div>
       </div>

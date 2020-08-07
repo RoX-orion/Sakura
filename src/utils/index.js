@@ -190,3 +190,18 @@ export function removeClass(ele, cls) {
   }
 }
 
+export function getHalfMon(){
+  var nowdate = new Date()
+  var time = new Array()
+  for(var i = 0; i<15; i++){
+      var mon = nowdate.getMonth() + 1
+      var day = nowdate.getDate()
+      // console.log(mon + " " + day)
+      time[i] = mon + "." + day
+      var tmp = nowdate
+      nowdate = new Date()
+      nowdate.setTime(tmp - 24*3600*1000)
+  }
+  return time.reverse()
+}
+
