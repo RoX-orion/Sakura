@@ -163,6 +163,9 @@ export default {
   }
 
   .card-panel {
+    &:hover{
+      box-shadow: 4px 4px 40px rgba(8, 8, 8, 0.1);
+    }
     height: 108px;
     cursor: pointer;
     font-size: 12px;

@@ -36,6 +36,7 @@
 <script>
 import {getSysInfo} from '@/api/system'
 import LineChart from './components/LineChart'
+import { getToken } from '@/utils/auth'
 
 const lineChartData = {
   newVisitis: {
@@ -62,6 +63,7 @@ export default {
   },
   data() {
     return {
+      token: getToken(),
       lineChartData: lineChartData,
       tableData: [
         { key: "操作系统版本", value: ""},
@@ -72,7 +74,7 @@ export default {
     }
   },
   created(){
-    this.systemInfo(),
+    this.systemInfo(this.token),
     this.handleSetLineChartData("newVisitis")
   },
   methods:{
@@ -80,10 +82,10 @@ export default {
       this.lineChartData = lineChartData[type]
     },
 
-    systemInfo(){
+    systemInfo(token){
       // var _this = this
-      getSysInfo().then( response => {
-      // console.log(response)
+      getSysInfo(token).then( response => {
+      // console.log(token)
         this.tableData[0].value = response.osName + " " + response.osArch
         this.tableData[1].value = response.SpringBootVersion
         this.tableData[2].value = response.javaVendor + " " + response.javaVersion

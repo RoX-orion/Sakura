@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import {changeUserInfo} from '@/api/user'
+
 export default {
   props: {
     user: {
@@ -25,12 +27,26 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      oldUsername: this.user.name
+    }
+  },
   methods: {
     submit() {
-      this.$message({
-        message: '已成功更新用户信息!',
-        type: 'success',
-        duration: 4 * 1000
+      const data= {
+        username: this.user.name,
+        email: this.user.email
+      }
+      console.log(this.oldUsername)
+      changeUserInfo(data).then(response=>{
+        if(response.code == 20000){
+          this.$message({
+            message: response.msg,
+            type: 'success',
+            duration: 3 * 1000
+          })
+        }
       })
     }
   }

@@ -10,16 +10,11 @@
           <div style="margin-bottom: 8px">Hello</div>
           {{ user.role }}
         </pan-thumb>
-        
+        <el-button type="primary" circle class="avatar"></el-button>
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
         <!-- <div class="user-role text-center text-muted"></div> -->
-        <div>
-          <el-button type="primary" icon="el-icon-upload" style="position: absolute;bottom: 15px;margin-left: 40px;" @click="imagecropperShow=true">
-            更换头像
-          </el-button>
-        </div>
       </div>
     </div>
 
@@ -78,11 +73,25 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .avatar{
+    position: absolute;
+    margin-left: -10px;
+    margin-top: 74px;
+    height:1px;
+    width:1px;
+  }
+</style>
 
 <style lang="scss" scoped>
 .box-center {
   margin: 0 auto;
   display: table;
+  // align-content: center;
+  align-self: center;
+    .change-avatar{
+      margin-top: 8px;
+    }
 }
 
 .text-muted {

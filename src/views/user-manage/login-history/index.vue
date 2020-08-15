@@ -5,11 +5,11 @@
         :data="tableData"
         style="width: 100%"
       >
-        <el-table-column label="序号" type=index></el-table-column>
+        <el-table-column label="序号" type="index" :index="getIndex"></el-table-column>
         <el-table-column label="用户名" prop="username"></el-table-column>
         <el-table-column label="登录时间" prop="loginDate"></el-table-column>
         <el-table-column label="设备" prop="os"></el-table-column>
-        <el-table-column label="浏览器" prop="browser"></el-table-column>
+        <el-table-column label="浏览器(内核)" prop="browser"></el-table-column>
         <el-table-column label="真实IP" prop="realIP"></el-table-column>
         <el-table-column label="代理IP" prop="proxyIP"></el-table-column>
         <el-table-column label="备注" prop="remarks">无</el-table-column>
@@ -45,39 +45,36 @@ import { getLoginHistory } from "@/api/getInformation"
 export default {
   data() {
     return {
+      index: 1,
       remarks: "无",
       total: 0,
       page: 1,
       size: 20,
-      tableList: [],
       tableData: [],
       search: "",
     };
   },
-  // computed: {
-  //   getTableList() {
-  //     return this.tableData
-  //   }
-  // },
+  computed: {
+    
+  },
   mounted() {
     this.getLoginHistory(this.page);
   },
   methods: {
     getLoginHistory(page) {
-      getLoginHistory(page).then((response) => {
+      const offset = (page - 1) * this.size
+      const count = this.size
+      getLoginHistory({offset, count}).then((response) => {
         this.tableData = response.data
         this.total = response.total
-        // console.log(this.total)
       });
-    },
-    prevPage() {
-      this.page++
-    },
-    nextPage() {
-      this.page--
     },
     changePage(page) {
       this.getLoginHistory(page)
+      this.page = page
+    },
+    getIndex(index) {
+      return (this.page - 1) * 20 + index + 1
     }
   }
 }

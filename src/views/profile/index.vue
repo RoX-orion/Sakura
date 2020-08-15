@@ -22,7 +22,6 @@
             </el-tabs>
           </el-card>
         </el-col>
-
       </el-row>
     </div>
   </div>
@@ -47,8 +46,9 @@ export default {
   computed: {
     ...mapGetters([
       'name',
-      'avatar'
-      // 'roles' 
+      'avatar',
+      'roles',
+      'email'
     ])
   },
   created() {
@@ -59,8 +59,8 @@ export default {
       this.user = {
         name: this.name,
         // role: this.roles.join(' | '),
-        role: '管理员',
-        email: 'admin@test.com',
+        role: this.roles,
+        email: this.email,
         avatar: this.avatar
       }
     }

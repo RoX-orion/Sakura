@@ -108,6 +108,12 @@ export const constantRoutes = [
         name: 'BackToTop',
         component: () => import('@/views/components/back-to-top'),
         meta: {  title: '返回顶部'}
+      },
+      {
+        path: 'card',
+        name: 'Card',
+        component: () => import('@/views/components/card'),
+        meta: { title: '卡片'}
       }
     ]
   },
@@ -122,7 +128,7 @@ export const constantRoutes = [
       {
         path: 'login-history',
         name: 'LoginHistory',
-        component: () => import('@/views/login-history/index'),
+        component: () => import('@/views/user-manage/login-history/index'),
         meta: { title: '登录记录' }
       }
     ]
