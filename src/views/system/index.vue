@@ -75,9 +75,40 @@ export default {
   },
   created(){
     this.systemInfo(this.token),
-    this.handleSetLineChartData("newVisitis")
+    this.handleSetLineChartData("newVisitis"),
+    this.initWebSocket()
+  },
+  destroyed(){
+    this.websocket.close()
   },
   methods:{
+    initWebSocket(){
+      var websocket
+      const wsuri = "ws://localhost:8888/websocket"
+      this.websocket = new WebSocket(wsuri)
+      this.websocket.onmessage = this.websocketonmessage;   
+      this.websocket.onopen = this.websocketonopen;        
+      this.websocket.onerror = this.websocketonerror;       
+      this.websocket.onclose = this.websocketclose;
+    },
+    websocketonopen(){ //连接建立之后执行send方法发送数据
+      var actions = {"test":"12345"};        
+      this.websocketsend(JSON.stringify(actions));
+    },
+    websocketonerror(){//连接建立失败重连
+      this.initWebSocket();
+    },
+    websocketonmessage(response){ //数据接收
+
+      const redata = response.data;
+      console.log(redata)   
+    },
+    websocketsend(Data){//数据发送
+      this.websocket.send(Data);
+    },
+    websocketclose(){  //关闭
+      console.log('断开连接');
+    },
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
     },

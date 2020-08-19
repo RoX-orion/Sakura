@@ -57,12 +57,14 @@ export default {
       @close="close"
       @crop-upload-success="cropSuccess"
     />
+    <el-button type="primary" @click="test"></el-button>
   </div>
 </template>
 
 <script>
 import ImageCropper from '@/components/ImageCropper'
 import PanThumb from '@/components/PanThumb'
+import {test} from '@/api/system'
 
 export default {
   name: 'AvatarUploadDemo',
@@ -82,6 +84,11 @@ export default {
     },
     close() {
       this.imagecropperShow = false
+    },
+    test(){
+      test().then(response =>{
+        console.log(response)
+      })
     }
   }
 }

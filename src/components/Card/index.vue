@@ -1,6 +1,8 @@
 <template>
-  <el-card :body-style="{ padding: '0px', height: '250px'}">
-    <img :src="src" class="image"/>
+  <el-card :body-style="{padding: '0px'}">
+    <div class="container">
+      <img :src="src" class="image"/>
+    </div>
     <div style="padding: 0px 8px 8px 8px">
       <h4>{{title}}</h4>
       <div class="bottom clearfix">
@@ -13,6 +15,8 @@
 </template>
 
 <script>
+
+
 export default {
   name: 'Card',
   props: {
@@ -38,11 +42,18 @@ export default {
 </script>
 
 <style>
-  .time {
-    font-size: 13px;
-    color: #999;
+  .container{
+    position:relative;
+    padding-bottom:70%;
+    height: 0;
   }
-  
+  .container .image{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%
+  }
   .bottom {
     margin-top: 13px;
     line-height: 12px;

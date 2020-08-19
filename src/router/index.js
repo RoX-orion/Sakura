@@ -59,11 +59,13 @@ export const constantRoutes = [
     path: '/system',
     component: Layout,
     redirect: '/system',
+    meta: { title: '系统', icon: 'system' },
+    alwaysShow: true,
     children: [{
       path: 'index',
-      name: 'System',
+      name: 'performance',
       component: () => import('@/views/system/index'),
-      meta: { title: '系统状态', icon: 'system' }
+      meta: {title: '性能'}
     }]
   },
 
@@ -114,6 +116,12 @@ export const constantRoutes = [
         name: 'Card',
         component: () => import('@/views/components/card'),
         meta: { title: '卡片'}
+      },
+      {
+        path: 'bilibili',
+        name: 'Bilibili',
+        component: () => import('@/views/components/bilibili'),
+        meta: {title: 'Bilibili播放器'}
       }
     ]
   },

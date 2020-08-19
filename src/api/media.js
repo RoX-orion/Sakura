@@ -23,3 +23,10 @@ export function getCard(data){
     data
   })
 }
+
+export function bilibili(){
+  return request({
+    url: 'api/bilibili',
+    method: 'post'
+  })
+}

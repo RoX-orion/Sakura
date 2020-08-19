@@ -9,7 +9,7 @@ export function getSysInfo(){
 
 export function test(){
   return request({
-    url: 'api/login-history',
-    method: 'get'
+    url: 'info',
+    method: 'post'
   })
 }
