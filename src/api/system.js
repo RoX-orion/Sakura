@@ -7,6 +7,13 @@ export function getSysInfo(){
   })
 }
 
+export function getStaticInfo(){
+  return request({
+    url: 'api/getStaticInfo',
+    method: 'post'
+  })
+}
+
 export function test(){
   return request({
     url: 'info',

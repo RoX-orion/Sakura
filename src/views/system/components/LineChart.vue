@@ -31,6 +31,10 @@ export default {
       type: Object,
       required: true,
     },
+    legendData: {
+      type: Array,
+      default: ['系统1', 'user', 'system']
+    }
   },
   data() {
     return {
@@ -64,6 +68,20 @@ export default {
     },
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
+        dataZoom: [
+            {
+              show: true,
+              realtime: true,
+              start: 0,
+              end: 144
+            },
+            {
+              type: 'inside',
+              realtime: true,
+              start: 65,
+              end: 85
+            }
+        ],
         xAxis: {
           data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
           boundaryGap: false,
@@ -91,11 +109,11 @@ export default {
           },
         },
         legend: {
-          data: ["新访客", "actual"],
+          data: this.legendData,
         },
         series: [
           {
-            name: "新访客",
+            name: this.legendData[0],
             itemStyle: {
               normal: {
                 color: "#FF005A",
@@ -112,7 +130,7 @@ export default {
             animationEasing: "cubicInOut",
           },
           {
-            name: "actual",
+            name: this.legendData[1],
             smooth: true,
             type: "line",
             itemStyle: {
@@ -129,6 +147,26 @@ export default {
             },
             data: actualData,
             animationDuration: 2800,
+            animationEasing: "quadraticOut",
+          },
+          {
+            name: this.legendData[1],
+            smooth: true,
+            type: "line",
+            itemStyle: {
+              normal: {
+                color: "#3888fa",
+                lineStyle: {
+                  color: "#3888fa",
+                  width: 2,
+                },
+                areaStyle: {
+                  color: "#f3f8ff",
+                },
+              },
+            },
+            data: actualData,
+            animationDuration: 2000,
             animationEasing: "quadraticOut",
           }
         ]

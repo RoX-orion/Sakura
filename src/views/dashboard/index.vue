@@ -7,7 +7,7 @@
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
           <div class="card-panel-icon-wrapper icon-people">
-            <svg-icon icon-class="user-manage" class-name="card-panel-icon" />
+            <svg-icon icon-class="new-visitor" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
@@ -20,11 +20,11 @@
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('messages')">
           <div class="card-panel-icon-wrapper icon-message">
-            <svg-icon icon-class="message" class-name="card-panel-icon" />
+            <svg-icon icon-class="new-visit" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              消息
+              新浏览量
             </div>
             <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
           </div>
@@ -33,7 +33,7 @@
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('purchases')">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon icon-class="money" class-name="card-panel-icon" />
+            <svg-icon icon-class="total-visitor" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
@@ -46,11 +46,11 @@
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('shoppings')">
           <div class="card-panel-icon-wrapper icon-shopping">
-            <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+            <svg-icon icon-class="look" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              浏览量
+              总浏览量
             </div>
             <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
           </div>
@@ -60,14 +60,20 @@
 
     <el-row style="margin-bottom:32px; margin-top: 30px">
       <el-col :span="24">
-        <el-card style="height: 100%" :lineChartData="lineChartData">
+        <el-card style="height: 100%" :lineChartData="lineChartData" class="card">
           <line-chart :chart-data="lineChartData"/>
         </el-card>
       </el-col>
     </el-row>
 
-    <el-row>
-      <el-col :xs="24" :md="10" :lg="10">
+    <el-row :gutter="20">
+      <el-col :xs="24" :md="12" :lg="12">
+        <el-card class="china-map">
+          <china-map></china-map>
+        </el-card>
+      </el-col>
+
+      <el-col :xs="24" :md="12" :lg="12">
         <el-card>
           <div align="center" style="margin-bottom: 15px"><b>如果您觉得此项目对您有帮助，可以请作者喝杯咖啡</b></div>
           <el-row>
@@ -95,10 +101,11 @@
 import { mapGetters } from 'vuex'
 import CountTo from 'vue-count-to'
 import LineChart from './components/LineChart'
+import ChinaMap from './components/ChinaMap'
 
 const lineChartData = {
   newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
+    expectedData: [100, 120, 161, 134, 105, 160, 165, 12, 45, 25, 46, 28, 79, 462, 256, 123],
     actualData: [120, 82, 91, 154, 162, 140, 145]
   },
   messages: {
@@ -125,7 +132,8 @@ export default {
   },
   components: {
     CountTo,
-    LineChart
+    LineChart,
+    ChinaMap
   },
   computed: {
     ...mapGetters([
@@ -274,5 +282,11 @@ export default {
       font-size: 30px;
       line-height: 46px;
     }
+  }
+</style>
+
+<style scoped>
+  .china-map{
+    margin-bottom: 20px;
   }
 </style>

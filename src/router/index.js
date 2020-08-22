@@ -61,12 +61,20 @@ export const constantRoutes = [
     redirect: '/system',
     meta: { title: '系统', icon: 'system' },
     alwaysShow: true,
-    children: [{
-      path: 'index',
-      name: 'performance',
-      component: () => import('@/views/system/index'),
-      meta: {title: '性能'}
-    }]
+    children: [
+      {
+        path: 'index',
+        name: 'performance',
+        component: () => import('@/views/system/performance'),
+        meta: {title: '性能监控'}
+      },
+      {
+        path: 'env',
+        name: 'Env',
+        component: () => import('@/views/system/env'),
+        meta: { title: '环境信息' }
+      }
+    ]
   },
 
   {

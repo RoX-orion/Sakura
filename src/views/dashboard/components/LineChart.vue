@@ -1,12 +1,17 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}" />
+      
+      <div :class="className" :style="{height:height,width:width}" >
+        
+      </div>
+
+  
 </template>
 
 <script>
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
-import {getHalfMon} from '@/utils/index'
+import { getHalfMon } from '@/utils/index'
 
 
 export default {
@@ -66,6 +71,20 @@ export default {
     },
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
+        // dataZoom: [
+        //     {
+        //         show: true,
+        //         realtime: true,
+        //         start: 0,
+        //         end: 144
+        //     },
+        //     {
+        //         type: 'inside',
+        //         realtime: true,
+        //         start: 65,
+        //         end: 85
+        //     }
+        // ],
         xAxis: {
           // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           data: getHalfMon(),

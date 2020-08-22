@@ -205,3 +205,24 @@ export function getHalfMon(){
   return time.reverse()
 }
 
+export function getOneDayHour() {
+  var end = 0
+  var start = 0;
+  var nowdate = new Date()
+  var time = new Array()
+  var mon = nowdate.getMonth() + 1
+  const this_min = nowdate.getMinutes()
+  if(this_min != 0){
+    time[0] = 1
+  }
+  for(var i = 0; i<15; i++){
+      var day = nowdate.getDate()
+      // console.log(mon + " " + day)
+      time[i] = mon + "." + day
+      var tmp = nowdate
+      nowdate = new Date()
+      nowdate.setTime(tmp - 24*3600*1000)
+  }
+  return time.reverse()
+}
+
