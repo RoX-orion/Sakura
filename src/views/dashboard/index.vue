@@ -172,7 +172,7 @@ export default {
 
   .card-panel {
     &:hover{
-      box-shadow: 4px 4px 40px rgba(8, 8, 8, 0.1);
+      box-shadow: 4px 4px 40px rgba(8, 8, 8, 0.2);
     }
     height: 108px;
     cursor: pointer;
@@ -181,7 +181,7 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, .12);
     border-color: rgba(0, 0, 0, .05);
 
     &:hover {

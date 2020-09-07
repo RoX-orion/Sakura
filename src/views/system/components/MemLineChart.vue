@@ -1,10 +1,5 @@
 <template>
-      
-      <div :class="className" :style="{height:height,width:width}" >
-        
-      </div>
-
-  
+  <div :class="className" :style="{height:height,width:width}" />
 </template>
 
 <script>
@@ -15,7 +10,7 @@ import { getHalfMon } from '@/utils/index'
 
 
 export default {
-  name: 'LineChart',
+  name: 'MemLineChart',
   mixins: [resize],
   props: {
     className: {
@@ -37,6 +32,10 @@ export default {
     chartData: {
       type: Object,
       required: true
+    },
+    xData: {
+      type: Array,
+      required: true
     }
   },
   data() {
@@ -46,10 +45,18 @@ export default {
   },
   watch: {
     chartData: {
-      deep: true,
-      handler(val) {
-        this.setOptions(val)
-      }
+      handler(newVal, oldVal) {
+        if (this.chart) {
+          if (newVal) {
+            this.setOptions(newVal);
+          } else {
+            this.setOptions(oldVal);
+          }
+        } else {
+            this.initChart();
+        }
+      },
+      deep: true //对象内部属性的监听，关键。
     }
   },
   mounted() {
@@ -68,25 +75,27 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
+      window.addEventListener("resize", this.chart.resize)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ usedMem, totalMem } = {}) {
       this.chart.setOption({
-        // dataZoom: [
-        //     {
-        //         show: true,
-        //         realtime: true,
-        //         start: 0,
-        //         end: 144
-        //     },
-        //     {
-        //         type: 'inside',
-        //         realtime: true,
-        //         start: 65,
-        //         end: 85
-        //     }
-        // ],
+        dataZoom: [
+            {
+              type: 'slider',
+              show: true,
+              realtime: true,
+              start: 0,
+              end: 144
+            },
+            // {
+            //   type: 'inside',
+            //   realtime: true,
+            //   start: 65,
+            //   end: 85
+            // }
+        ],
         xAxis: {
-          data: getHalfMon(),
+          data: this.xData,
           boundaryGap: false,
           axisTick: {
             show: false
@@ -109,13 +118,14 @@ export default {
         yAxis: {
           axisTick: {
             show: false
-          }
+          },
+          // max: 16
         },
         legend: {
-          data: ['新访问', '所有访问']
+          data: ['总使用量', '所有访问']
         },
         series: [{
-          name: '新访问', itemStyle: {
+          name: '总使用量', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -126,7 +136,7 @@ export default {
           },
           smooth: true,
           type: 'line',
-          data: expectedData,
+          data: usedMem,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
         },
@@ -146,7 +156,7 @@ export default {
               }
             }
           },
-          data: actualData,
+          data: totalMem,
           animationDuration: 2800,
           animationEasing: 'quadraticOut'
         }]

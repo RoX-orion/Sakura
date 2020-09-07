@@ -8,7 +8,7 @@ require("echarts/theme/macarons"); // echarts theme
 import resize from "./mixins/resize";
 
 export default {
-  name: "LineChart",
+  name: "CPULineChart",
   mixins: [resize],
   props: {
     className: {
@@ -29,11 +29,11 @@ export default {
     },
     chartData: {
       type: Object,
-      required: true,
+      required: true
     },
-    legendData: {
+    xData: {
       type: Array,
-      default: ['系统1', 'user', 'system']
+      required: true
     }
   },
   data() {
@@ -43,11 +43,19 @@ export default {
   },
   watch: {
     chartData: {
-      deep: true,
-      handler(val) {
-        this.setOptions(val);
+      handler(newVal, oldVal) {
+        if (this.chart) {
+          if (newVal) {
+            this.setOptions(newVal);
+          } else {
+            this.setOptions(oldVal);
+          }
+        } else {
+            this.initChart();
+        }
       },
-    },
+      deep: true //对象内部属性的监听，关键。
+    }
   },
   mounted() {
     this.$nextTick(() => {
@@ -58,32 +66,34 @@ export default {
     if (!this.chart) {
       return;
     }
-    this.chart.dispose();
-    this.chart = null;
+    this.chart.dispose()
+    this.chart = null
   },
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, "macarons");
-      this.setOptions(this.chartData);
+      this.setOptions(this.chartData, true);
+      window.addEventListener("resize", this.chart.resize);
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ usedCPU, sysUsedCPU, userUsedCPU } = {}, x) {
       this.chart.setOption({
         dataZoom: [
             {
+              type: 'slider',
               show: true,
               realtime: true,
               start: 0,
               end: 144
             },
-            {
-              type: 'inside',
-              realtime: true,
-              start: 65,
-              end: 85
-            }
+            // {
+            //   type: 'inside',
+            //   realtime: true,
+            //   start: 65,
+            //   end: 85
+            // }
         ],
         xAxis: {
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          data: this.xData,
           boundaryGap: false,
           axisTick: {
             show: false,
@@ -107,13 +117,16 @@ export default {
           axisTick: {
             show: false,
           },
+          type : 'value',
+          // max: 100,
+          axisLabel:{formatter:'{value}%'}
         },
         legend: {
-          data: this.legendData,
+          data: ['总使用率', '系统', '用户'],
         },
         series: [
           {
-            name: this.legendData[0],
+            name: '总使用率',
             itemStyle: {
               normal: {
                 color: "#FF005A",
@@ -125,12 +138,12 @@ export default {
             },
             smooth: true,
             type: "line",
-            data: expectedData,
+            data: usedCPU,
             animationDuration: 2800,
             animationEasing: "cubicInOut",
           },
           {
-            name: this.legendData[1],
+            name: '系统',
             smooth: true,
             type: "line",
             itemStyle: {
@@ -145,19 +158,19 @@ export default {
                 },
               },
             },
-            data: actualData,
+            data: sysUsedCPU,
             animationDuration: 2800,
             animationEasing: "quadraticOut",
           },
           {
-            name: this.legendData[1],
+            name: '用户',
             smooth: true,
             type: "line",
             itemStyle: {
               normal: {
-                color: "#3888fa",
+                color: "#67c23a",
                 lineStyle: {
-                  color: "#3888fa",
+                  color: "#67c23a",
                   width: 2,
                 },
                 areaStyle: {
@@ -165,7 +178,7 @@ export default {
                 },
               },
             },
-            data: actualData,
+            data: userUsedCPU,
             animationDuration: 2000,
             animationEasing: "quadraticOut",
           }

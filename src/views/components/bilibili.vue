@@ -36,7 +36,7 @@ export default {
         // enableStashBuffer: false,
         // stashInitialSize: 128,
         hasAudio: true,
-        url: 'http://localhost:8888/static/video/nuclear.flv',
+        url: 'http://123.56.236.23:8888/static/video/nuclear.flv',
       });
       console.log(flvPlayer, "flv对象");
       flvPlayer.attachMediaElement(videoId);

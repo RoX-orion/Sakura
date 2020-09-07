@@ -14,6 +14,21 @@ export function getStaticInfo(){
   })
 }
 
+export function getDatabaseLiveInfo(data){
+  return request({
+    url: 'api/getDatabaseLiveInfo',
+    method: 'post',
+    data
+  })
+}
+
+export function getProcessInfo() {
+  return request({
+    url: 'api/getProcessInfo',
+    method: 'post'
+  })
+}
+
 export function test(){
   return request({
     url: 'info',

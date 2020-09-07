@@ -12,7 +12,7 @@
       <!-- <el-col :xs="0" :sm="2">
         <p></p>
       </el-col> -->
-      <el-col :xs="24" :sm="12">
+      <el-col :xs="24" :sm="12" style="margin-bottom: 20px">
         <el-card v-bind="systemLiveInfo">
           <label>内存</label>
           <el-progress :percentage="memPercentage" :color="customColorMethod"></el-progress>{{usedMem}}/{{totalMem}}<br><br>
@@ -26,13 +26,28 @@
       </el-col>
     </el-row>
     
-    <el-card style="height: 100%" :lineChartData="lineChartData">
-      <span style="text-align:center">JVM监控</span>
-    </el-card>
+    <el-row :gutter="40">
+      <el-col :lg="12">
+        <el-card style="height: 100%">
+          <div style="font-size: 20px;">进程</div>
+          <hr>
+          <el-table :data="processTableData" style="width: 100%">
+            <el-table-column prop="processPID" label="进程PID" width="90"></el-table-column>
+            <el-table-column prop="processUptime" label="运行时间" width="150"></el-table-column>
+            <el-table-column prop="processCpuUsed" label="进程CPU使用率"></el-table-column>
+            <el-table-column prop="cpuCount" label="CPU核心数"></el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+      <el-col :lg="12">
+
+      </el-col>
+    </el-row>
+    
     <!-- <panel-group @handleSetLineChartData="handleSetLineChartData" /> -->
-    <el-row style="margin-bottom:32px; margin-top: 30px">
+    <el-row style="margin-bottom:32px; margin-top: 30px" class="resource">
       <el-col style="margin-bottom: 30px">
-        <el-card style="height: 100%" :lineChartData="lineChartData">
+        <el-card style="height: 100%">
           <el-row type="flex" justify="center" style="margin-bottom: 10px">
             <span>CPU使用率</span>
           </el-row>
@@ -41,12 +56,12 @@
             <li>15min</li>
             <li>30min</li>
           </div>
-          <line-chart :chart-data="lineChartData"/>
+          <CPULineChart :chart-data="CPUlineChartData" :xData="xAxis" />
         </el-card>
       </el-col>
 
       <el-col style="margin-bottom: 30px">
-        <el-card style="height: 100%" :lineChartData="lineChartData">
+        <el-card style="height: 100%">
           <el-row type="flex" justify="center" style="margin-bottom: 10px">
             <span>内存使用率</span>
           </el-row>
@@ -55,11 +70,11 @@
             <li>15min</li>
             <li>30min</li>
           </div>
-          <line-chart :chart-data="lineChartData"/>
+          <mem-line-chart :chart-data="MemLineChartData" :xData="xAxis"/>
         </el-card>
       </el-col>
 
-      <el-col style="margin-bottom: 30px">
+      <!--<el-col style="margin-bottom: 30px">
         <el-card style="height: 100%" :lineChartData="lineChartData">
           <el-row type="flex" justify="center" style="margin-bottom: 10px">
             <span>带宽使用率</span>
@@ -85,7 +100,7 @@
           </div>
           <line-chart :chart-data="lineChartData"/>
         </el-card>
-      </el-col>
+      </el-col>-->
     </el-row>
 
     
@@ -93,19 +108,24 @@
 </template>
 
 <script>
-import {getSysInfo} from '@/api/system'
-import LineChart from './components/LineChart'
+import { getSysInfo, getDatabaseLiveInfo, getProcessInfo } from '@/api/system'
+import CPULineChart from './components/CPULineChart'
+import MemLineChart from './components/MemLineChart'
 import { getToken } from '@/utils/auth'
 import { parse } from 'path-to-regexp'
+import { sendWebsocket, closeWebsocket, initWebSocket } from '@/utils/websocket'
 
 const lineChartData = {
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
+  cpu: {
+    time: new Date(),
+    usedCPU: [0],
+    sysUsedCPU: [],
+    userUsedCPU: []
   },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
+  mem: {
+    time: new Date(),
+    usedMem: [],
+    totalMem: []
   },
   purchases: {
     expectedData: [80, 100, 121, 104, 105, 90, 100],
@@ -117,9 +137,11 @@ const lineChartData = {
   }
 }
 
+
 export default {
   components: {
-    LineChart
+    CPULineChart,
+    MemLineChart
   },
   data() {
     return {
@@ -144,52 +166,70 @@ export default {
       totalDisk: 0,
       usedDisk: 0,
       token: getToken(),
-      lineChartData: lineChartData,
+      CPUlineChartData: lineChartData.cpu,
+      MemLineChartData: lineChartData.mem,
       tableData: [
         { key: "操作系统版本", value: ""},
         { key: "SpringBoot版本", value: ""},
         { key: "JDK", value: ""},
-        { key: "进程ID", value: ""},
-        { key: "应用运行时间", value: ""}
+        { key: "系统启动时间", value: ""},
+        { key: "进程启动时间", value: ""}
       ],
-      systemLiveInfo: {}
+      intervalId: '',
+      systemLiveInfo: {},
+      xAxis: [],
+      processTableData: []
     }
   },
   created(){
     this.systemInfo(this.token),
-    this.handleSetLineChartData("newVisitis"),
-    this.initWebSocket()
+    this.requstWs(),
+    this.getEchartsData(),
+    this.getProcessInfo(),
+    this.processIintervalId = setInterval(this.getProcessInfo, 2000);
+    this.echartIintervalId = setInterval(this.getEchartsData, 1000 * 60 * 5)
+  },
+  mounted(){
+    
   },
   destroyed(){
-    this.websocket.close()
+    closeWebsocket(),
+    clearInterval(this.echartIintervalId)
+    clearInterval(this.processIintervalId)
   },
   methods:{
+    getProcessInfo() {
+      getProcessInfo().then(response => {
+        this.processTableData.pop()
+        this.processTableData.push(response.data)
+      })
+    },
+    getEchartsData() {
+      const id = "abc"
+      getDatabaseLiveInfo({id}).then(response => {
+        const data = response.data
+        var i
+        for(i = 0; i<data.length; i++){
+          this.xAxis[i] = data[i].date
+          this.CPUlineChartData.sysUsedCPU[i] = data[i].sysUsedCPU
+          this.CPUlineChartData.userUsedCPU[i] = data[i].userUsedCPU
+          this.CPUlineChartData.usedCPU[i] = data[i].usedCPU
+          this.MemLineChartData.usedMem[i] = data[i].usedMem.substr(0, data[i].usedMem.length - 2)
+          this.MemLineChartData.totalMem[i] = data[i].totalMem
+        }
+        this.CPUlineChartData.time = new Date()
+        this.MemLineChartData.time = new Date()
+      })
+    },
     customColorMethod(percentage) {
       if (percentage < 80) {
-        return '#67c23a';//#6f7ad3蓝  #67c23a绿  #e6a23c橙
+        return '#67c23a' //#6f7ad3蓝  #67c23a绿  #e6a23c橙
       } else {
-        return '#DC7633';
+        return '#DC7633'
       }
     },
-    initWebSocket(){
-      var websocket
-      // const wsuri = "ws://123.56.236.23:8888/websocket"
-      const wsuri = "ws://localhost:8888  /websocket"
-      this.websocket = new WebSocket(wsuri)
-      this.websocket.onmessage = this.websocketonmessage;   
-      this.websocket.onopen = this.websocketonopen;        
-      this.websocket.onerror = this.websocketonerror;       
-      this.websocket.onclose = this.websocketclose;
-    },
-    websocketonopen(){ //连接建立之后执行send方法发送数据
-      var actions = {"test":"12345"};        
-      this.websocketsend(JSON.stringify(actions));
-    },
-    websocketonerror(){//连接建立失败重连
-      // this.initWebSocket();
-    },
-    websocketonmessage(response){ //数据接收
-      const jsonObject = JSON.parse(response.data);
+    wsMessage (data) {
+      const jsonObject = data
       this.usedMem = jsonObject.usedMem
       this.totalMem = jsonObject.totalMem
       this.memPercentage = parseFloat(jsonObject.memRate)
@@ -210,26 +250,27 @@ export default {
       this.totalDisk = jsonObject.totalDisk
       this.usedDisk = jsonObject.usedDisk
       this.diskPercentage = parseFloat(jsonObject.diskRate)
-      console.log(jsonObject.usedMem)
+      
     },
-    websocketsend(Data){//数据发送
-      this.websocket.send(Data);
+    wsError () {
+      initWebSocket()
     },
-    websocketclose(){  //关闭
-      console.log('断开连接');
+    requstWs () {
+      // 防止用户多次连续点击发起请求，所以要先关闭上次的ws请求。
+      closeWebsocket()
+      const obj = {
+        monitorUrl: 'xxxxxxxxxxxxx',
+        userName: 'xxxxxxxxxx'
+      }
+      sendWebsocket('ws://123.56.236.23:8888/liveInfo/555', obj, this.wsMessage, this.wsError)
     },
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
-    },
-
     systemInfo(token){
-      // var _this = this
       getSysInfo(token).then( response => {
-      // console.log(token)
         this.tableData[0].value = response.osName
         this.tableData[1].value = response.SpringBootVersion
         this.tableData[2].value = response.javaVendor + " " + response.javaVersion
-        // this.tableData[3].value = response.javaVmName + " " + response.javaVmVersion
+        this.tableData[3].value = response.systemStartTime
+        this.tableData[4].value = response.processStartTime
       });
     }
   }
@@ -237,6 +278,9 @@ export default {
 </script>
 
 <style scoped>
+.cpu{
+  padding-left: 0;
+}
   .system-container{
     margin: 15px;
   }
@@ -256,5 +300,12 @@ export default {
     cursor: pointer;
     margin-left: 40px;
     list-style:none;
+  }
+</style>
+
+<style>
+  .resource .el-card__body{
+    padding-left: 0;
+    padding-right: 0;
   }
 </style>
