@@ -28,19 +28,27 @@
     
     <el-row :gutter="40">
       <el-col :lg="12">
-        <el-card style="height: 100%">
+        <el-card style="height: 100%; margin-bottom: 20px">
           <div style="font-size: 20px;">进程</div>
           <hr>
           <el-table :data="processTableData" style="width: 100%">
-            <el-table-column prop="processPID" label="进程PID" width="90"></el-table-column>
-            <el-table-column prop="processUptime" label="运行时间" width="150"></el-table-column>
+            <el-table-column prop="processPID" label="进程PID"></el-table-column>
+            <el-table-column prop="processUptime" label="运行时间"></el-table-column>
             <el-table-column prop="processCpuUsed" label="进程CPU使用率"></el-table-column>
             <el-table-column prop="cpuCount" label="CPU核心数"></el-table-column>
           </el-table>
         </el-card>
       </el-col>
       <el-col :lg="12">
-
+        <el-card style="height: 100%">
+          <div style="font-size: 20px;">线程</div>
+          <hr>
+          <el-table :data="threadTableData" style="width: 100%">
+            <el-table-column prop="activeThread" label="活动线程"></el-table-column>
+            <el-table-column prop="daemonsProcess" label="守护进程"></el-table-column>
+            <el-table-column prop="maxThread" label="线程峰值"></el-table-column>
+          </el-table>
+        </el-card>
       </el-col>
     </el-row>
     
@@ -51,7 +59,7 @@
           <el-row type="flex" justify="center" style="margin-bottom: 10px">
             <span>CPU使用率</span>
           </el-row>
-          <div style="margin-bottom:40px">
+          <div style="margin-bottom:40px" class="time">
             <li>5min</li>
             <li>15min</li>
             <li>30min</li>
@@ -65,7 +73,7 @@
           <el-row type="flex" justify="center" style="margin-bottom: 10px">
             <span>内存使用率</span>
           </el-row>
-          <div style="margin-bottom:40px">
+          <div style="margin-bottom:40px" class="time">
             <li>5min</li>
             <li>15min</li>
             <li>30min</li>
@@ -108,7 +116,7 @@
 </template>
 
 <script>
-import { getSysInfo, getDatabaseLiveInfo, getProcessInfo } from '@/api/system'
+import { getSysInfo, getDatabaseLiveInfo, getProcessInfo, getThreadInfo } from '@/api/getInformation'
 import CPULineChart from './components/CPULineChart'
 import MemLineChart from './components/MemLineChart'
 import { getToken } from '@/utils/auth'
@@ -165,6 +173,9 @@ export default {
       diskPercentage: 0,
       totalDisk: 0,
       usedDisk: 0,
+
+      process: {},
+      thread: {},
       token: getToken(),
       CPUlineChartData: lineChartData.cpu,
       MemLineChartData: lineChartData.mem,
@@ -178,30 +189,32 @@ export default {
       intervalId: '',
       systemLiveInfo: {},
       xAxis: [],
-      processTableData: []
+      processTableData: [],
+      threadTableData: [],
     }
   },
   created(){
     this.systemInfo(this.token),
     this.requstWs(),
     this.getEchartsData(),
-    this.getProcessInfo(),
-    this.processIintervalId = setInterval(this.getProcessInfo, 2000);
     this.echartIintervalId = setInterval(this.getEchartsData, 1000 * 60 * 5)
-  },
-  mounted(){
-    
+    this.getThreadInfo(),
+    this.threadInfoId = setInterval(this.getThreadInfo, 1000 * 60)
   },
   destroyed(){
     closeWebsocket(),
     clearInterval(this.echartIintervalId)
-    clearInterval(this.processIintervalId)
+    clearInterval(this.threadInfoId)
   },
   methods:{
-    getProcessInfo() {
-      getProcessInfo().then(response => {
-        this.processTableData.pop()
-        this.processTableData.push(response.data)
+    getThreadInfo(){
+      getThreadInfo().then(response => {
+        const data = response.data
+        this.thread.activeThread = data.activeThread
+        this.thread.daemonsProcess = data.daemonsProcess
+        this.thread.maxThread = data.maxThread
+        this.threadTableData.pop()
+        this.threadTableData.push(this.thread)
       })
     },
     getEchartsData() {
@@ -209,13 +222,15 @@ export default {
       getDatabaseLiveInfo({id}).then(response => {
         const data = response.data
         var i
-        for(i = 0; i<data.length; i++){
-          this.xAxis[i] = data[i].date
-          this.CPUlineChartData.sysUsedCPU[i] = data[i].sysUsedCPU
-          this.CPUlineChartData.userUsedCPU[i] = data[i].userUsedCPU
-          this.CPUlineChartData.usedCPU[i] = data[i].usedCPU
-          this.MemLineChartData.usedMem[i] = data[i].usedMem.substr(0, data[i].usedMem.length - 2)
-          this.MemLineChartData.totalMem[i] = data[i].totalMem
+        var j = 0;
+        for(i = data.length - 1; i>=0; i--){
+          this.xAxis[j] = data[i].date
+          this.CPUlineChartData.sysUsedCPU[j] = data[i].sysUsedCPU
+          this.CPUlineChartData.userUsedCPU[j] = data[i].userUsedCPU
+          this.CPUlineChartData.usedCPU[j] = data[i].usedCPU
+          this.MemLineChartData.usedMem[j] = data[i].usedMem.substr(0, data[i].usedMem.length - 2)
+          this.MemLineChartData.totalMem[j] = data[i].totalMem
+          j++
         }
         this.CPUlineChartData.time = new Date()
         this.MemLineChartData.time = new Date()
@@ -250,7 +265,17 @@ export default {
       this.totalDisk = jsonObject.totalDisk
       this.usedDisk = jsonObject.usedDisk
       this.diskPercentage = parseFloat(jsonObject.diskRate)
-      
+
+      this.process.processCpuUsed = jsonObject.processCpuUsed + '%'
+      const time = jsonObject.processUptime.split('.')
+      const uptime = time[0] + '天' + time[1] + '小时' + time[2] + '分钟' + time[3] + '秒'
+
+      this.process.cpuCount = jsonObject.cpuCount
+      this.process.processPID = jsonObject.processPID
+
+      this.process.processUptime = uptime
+      this.processTableData.pop()
+      this.processTableData.push(this.process)
     },
     wsError () {
       initWebSocket()
@@ -262,7 +287,8 @@ export default {
         monitorUrl: 'xxxxxxxxxxxxx',
         userName: 'xxxxxxxxxx'
       }
-      sendWebsocket('ws://123.56.236.23:8888/liveInfo/555', obj, this.wsMessage, this.wsError)
+      // sendWebsocket('ws://123.56.236.23:8888/liveInfo/555', obj, this.wsMessage, this.wsError)
+      sendWebsocket('ws://localhost:8888/liveInfo/555', obj, this.wsMessage, this.wsError)
     },
     systemInfo(token){
       getSysInfo(token).then( response => {
@@ -278,18 +304,18 @@ export default {
 </script>
 
 <style scoped>
-.cpu{
-  padding-left: 0;
-}
+  .cpu{
+    padding-left: 0;
+  }
   .system-container{
     margin: 15px;
   }
-
+/* 
   ul {
     display: block;
-  }
+  } */
 
-  li{
+  .time li{
     display: block;
     float: left;
     width: 50px;
@@ -299,6 +325,14 @@ export default {
     text-align: center;
     cursor: pointer;
     margin-left: 40px;
+    list-style:none;
+  }
+
+  .process li{
+    /* width: 120px; */
+    margin-right: 20px;
+    display: block;
+    float: left;
     list-style:none;
   }
 </style>

@@ -129,12 +129,17 @@ export default {
             normal: {
               color: '#FF005A',
               lineStyle: {
-                color: '#FF005A',
+                color: '#5bace3',
                 width: 2
               }
             }
           },
-          smooth: true,
+          areaStyle: {
+            normal: {
+              color:'#5bace3',
+            }
+          },
+          smooth: false,
           type: 'line',
           data: usedMem,
           animationDuration: 2800,

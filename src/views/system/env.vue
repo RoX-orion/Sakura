@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getStaticInfo } from '@/api/system'
+import { getStaticInfo } from '@/api/getInformation'
 
 export default {
   data() {
