@@ -114,6 +114,12 @@ export const constantRoutes = [
         meta: { title: '富文本编辑器' }
       },
       {
+        path: 'mavon-editor',
+        name: 'MavonEditor',
+        component: () => import('@/views/components/mavon-editor'),
+        meta: { title: 'MarkDown编辑器' }
+      },
+      {
         path: 'backToTop',
         name: 'BackToTop',
         component: () => import('@/views/components/back-to-top'),
