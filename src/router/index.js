@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import { addArticle } from '@/api/article'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -54,7 +55,25 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-
+  {
+    path: '/article',
+    component: Layout,
+    meta: { title: '文章管理', icon: 'article' },
+    children: [
+      {
+        path: 'all-article',
+        name: 'AllArticle',
+        component: () => import('@/views/article/all-article'),
+        meta: { title: '所有文章' }
+      },
+      {
+        path: 'add-article',
+        name: 'AddArticle',
+        component: () => import('@/views/article/add-article'),
+        meta: { title: '写文章' }
+      }
+    ]
+  },
   {
     path: '/system',
     component: Layout,

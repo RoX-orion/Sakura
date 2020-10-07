@@ -26,7 +26,7 @@ export default {
   name: 'Page404',
   computed: {
     message() {
-      return '站长说你不能进入这个页面。。。'
+      return '您访问的页面不存在！！！'
     }
   }
 }
