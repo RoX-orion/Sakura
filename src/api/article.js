@@ -7,3 +7,11 @@ export function addArticle(data) {
     data
   })
 }
+
+export function saveArticle(data) {
+  return request({
+    url: 'api/saveArticle',
+    method: 'post',
+    data
+  })
+}

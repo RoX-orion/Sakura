@@ -7,7 +7,7 @@
 </template>
 
 <script>
-
+import { saveArticle } from '@/api/article'
 
 export default {
   data() {
@@ -22,6 +22,10 @@ export default {
     },
     saveDoc(value, render) {
       if(this.isChange == true){
+        const text = value
+        saveArticle({text}).then(response => {
+          
+        })
         console.log('value = \n' + value)
         console.log('render = \n' + render)
         this.isChange = false
