@@ -1,16 +1,16 @@
 import request from '@/utils/request'
 
-export function addArticle(data) {
+export function addPost(data) {
   return request({
-    url: 'api/addArticle',
+    url: 'api/addPost',
     method: 'post',
     data
   })
 }
 
-export function saveArticle(data) {
+export function savePost(data) {
   return request({
-    url: 'api/saveArticle',
+    url: 'api/savePost',
     method: 'post',
     data
   })
