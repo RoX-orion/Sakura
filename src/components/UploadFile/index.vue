@@ -6,6 +6,9 @@
         drag
         action="api/uploadFile"
         :headers="headers"
+        :file-list="fileList"
+        :on-success="uploadSuccess"
+        ref="upload"
         multiple>
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -20,6 +23,11 @@ import { getToken } from '@/utils/auth'
 
 export default {
   name: 'UploadFile',
+  data() {
+    return {
+      fileList: []
+    }
+  },
   computed: {
     headers() {
       return {
@@ -27,6 +35,17 @@ export default {
       }
     }
   },
+  methods: {
+    uploadSuccess() {
+      this.$refs['upload'].clearFiles()
+    },
+    upload() {
+      console.log(this.fileList)
+    },
+    clearFiles() {
+      
+    }
+  }
 }
 </script>
 
