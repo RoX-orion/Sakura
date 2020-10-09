@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'sakura_token'
+const TokenKey = 'login_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
