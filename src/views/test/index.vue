@@ -138,32 +138,7 @@ export default {
         </el-card>
       </el-col>
     </el-row>
-    <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              首页
-            </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://github.com/RoX-orion/">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
-          <router-link to="/profile/index">
-            <el-dropdown-item>
-              个人中心
-            </el-dropdown-item>
-          </router-link>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">退出登录</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+    <upload-file/>
   </div>
 </template>
 
@@ -189,101 +164,25 @@ export default {
 </style>
 
 <script>
-import echarts from "echarts";
-import "echarts/map/js/china.js";
+import { getToken } from '@/utils/auth'
+import UploadFile from '@/components/UploadFile'
 
 export default {
-  name: "ChinaMap",
-  props: ["userJson"],
-    data() {
+  components: {
+    UploadFile
+  },
+  computed: {
+    headers() {
       return {
-        chart: null
-      };
-    },
-    mounted() {
-      this.chinaConfigure();
-    },
-    beforeDestroy() {
-      if (!this.chart) {
-        return;
-      }
-      this.chart.dispose();
-      this.chart = null;
-    },
-    methods: {
-      chinaConfigure() {
-        console.log(this.userJson)
-        let myChart = echarts.init(this.$refs.myEchart); //这里是为了获得容器所在位置    
-        window.onresize = myChart.resize;
-        myChart.setOption({ // 进行相关配置
-          backgroundColor: "#02AFDB",
-          tooltip: {}, // 鼠标移到图里面的浮动提示框
-          dataRange: {
-            show: false,
-            min: 0,
-            max: 1000,
-            text: ['High', 'Low'],
-            realtime: true,
-            calculable: true,
-            color: ['orangered', 'yellow', 'lightskyblue']
-          },
-          geo: { // 这个是重点配置区
-            map: 'china', // 表示中国地图
-            roam: true,
-            label: {
-              normal: {
-                show: true, // 是否显示对应地名
-                textStyle: {
-                  color: 'rgba(0,0,0,0.4)'
-                }
-              }
-            },
-            itemStyle: {
-              normal: {
-                borderColor: 'rgba(0, 0, 0, 0.2)'
-              },
-              emphasis: {
-                areaColor: null,
-                shadowOffsetX: 0,
-                shadowOffsetY: 0,
-                shadowBlur: 20,
-                borderWidth: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          },
-          series: [{
-              type: 'scatter',
-              coordinateSystem: 'geo' // 对应上方配置
-            },
-            {
-              name: '启动次数', // 浮动框的标题
-              type: 'map',
-              geoIndex: 0,
-              data: [{
-                "name": "北京",
-                "value": 599
-              }, {
-                "name": "上海",
-                "value": 142
-              }, {
-                "name": "黑龙江",
-                "value": 44
-              }, {
-                "name": "深圳",
-                "value": 92
-              }, {
-                "name": "湖北",
-                "value": 810
-              }, {
-                "name": "四川",
-                "value": 453
-              }]
-            }
-          ]
-        })
+        'X-token' : getToken()
       }
     }
+  },
+  methods: {
+    beforeUpload() {
+      console.log("1111")
+    }
+  }
 }
 </script>
 
