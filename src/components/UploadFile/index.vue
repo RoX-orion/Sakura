@@ -5,10 +5,9 @@
         class="upload-demo"
         drag
         action="api/uploadFile"
-        :headers="headers"
-        :file-list="fileList"
-        :on-success="uploadSuccess"
         ref="upload"
+        :file-list="fileList"
+        :http-request="upload"
         multiple>
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -20,31 +19,32 @@
 
 <script>
 import { getToken } from '@/utils/auth'
+import { uploadFile } from '@/api/upload'
 
 export default {
   name: 'UploadFile',
   data() {
     return {
-      fileList: []
-    }
-  },
-  computed: {
-    headers() {
-      return {
-        'X-token' : getToken()
-      }
+      fileList: [],
     }
   },
   methods: {
-    uploadSuccess() {
-      this.$refs['upload'].clearFiles()
+    upload(param) {
+      const data = new FormData()
+      data.append('file', param.file)
+      uploadFile(data).then(response =>{
+        const code = response.code
+        if(code == 200){
+          this.$message({
+            message: '文件上传成功！',
+            center:true,
+            showClose: true,
+            type: 'success'
+          })
+          this.$refs['upload'].clearFiles()
+        }
+      })
     },
-    upload() {
-      console.log(this.fileList)
-    },
-    clearFiles() {
-      
-    }
   }
 }
 </script>
