@@ -92,6 +92,12 @@ export const constantRoutes = [
         name: 'Env',
         component: () => import('@/views/system/env'),
         meta: { title: '环境信息' }
+      },
+      {
+        path: 'setting',
+        name: 'Setting',
+        component: () => import('@/views/system/setting'),
+        meta: { title: '设置' }
       }
     ]
   },
