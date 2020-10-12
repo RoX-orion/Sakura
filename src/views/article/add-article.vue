@@ -32,7 +32,7 @@
       <el-collapse>
         <el-collapse-item title="分类目录" name="1">
           <el-cascader
-            class="meta-cascader"
+            class="term-cascader"
             :options="options"
             :props="props"
             collapse-tags
@@ -42,7 +42,7 @@
           <el-dialog title="添加新分类目录" :visible.sync="dialogFormVisible">
             <el-form>
               <el-form-item label="目录名称" :label-width="formLabelWidth">
-                <el-input v-model="newMeta" autocomplete="off"></el-input>
+                <el-input v-model="newTerm" autocomplete="off"></el-input>
               </el-form-item>
               <el-form-item label="父级目录" :label-width="formLabelWidth">
                 <el-select  placeholder="请选择活动区域">
@@ -100,7 +100,7 @@ export default {
       inputTags: '',
       tags: [],
       dialogFormVisible: false,
-      newMeta: '',
+      newTerm: '',
       formLabelWidth: '120px',
       options: [{
         value: 1,
@@ -187,7 +187,7 @@ export default {
     margin-top: 20px;
   }
 
-  .meta-cascader {
+  .term-cascader {
     margin-right: 10px;
     margin-bottom: 10px;
   }

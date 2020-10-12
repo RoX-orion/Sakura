@@ -20,7 +20,7 @@
       </div>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column prop="title" label="标题"> </el-table-column>
-        <el-table-column prop="meta" label="分类目录"> </el-table-column>
+        <el-table-column prop="term" label="分类目录"> </el-table-column>
         <el-table-column prop="message" label="留言"> </el-table-column>
         <el-table-column prop="postDate" label="发布日期"> </el-table-column>
         <el-table-column prop="postModified" label="最后更新"> </el-table-column>
