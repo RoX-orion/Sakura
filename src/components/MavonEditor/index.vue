@@ -1,6 +1,6 @@
 <template>
   <mavon-editor 
-  class="mavon-editor" 
+  class="mavon-editor v-note-wrapper" 
   :boxShadowStyle="boxShadowStyle"
   @imgAdd="imgAdd"
   @imgDel="imgDel"/>
@@ -52,5 +52,9 @@ export default {
 <style scoped>
   .mavon-editor {
     height: 650px;
+  }
+
+  .v-note-wrapper {
+    position: inherit;
   }
 </style>
