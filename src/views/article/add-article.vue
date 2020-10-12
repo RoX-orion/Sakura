@@ -38,17 +38,34 @@
             collapse-tags
             clearable>
           </el-cascader>
-          <el-button type="success">添加新分类目录</el-button>
+          <el-button type="success" @click="dialogFormVisible = true">添加新分类目录</el-button>
+          <el-dialog title="添加新分类目录" :visible.sync="dialogFormVisible">
+            <el-form>
+              <el-form-item label="目录名称" :label-width="formLabelWidth">
+                <el-input v-model="newMeta" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="父级目录" :label-width="formLabelWidth">
+                <el-select  placeholder="请选择活动区域">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+            </div>
+          </el-dialog>
         </el-collapse-item>
         <el-collapse-item title="标签" name="2">
           <el-input
-            @change="addTags"
+            @keyup.enter.native="addTags"
             class="tag-input"
             placeholder="请输入标签名"
             v-model="inputTags"
             clearable>
           </el-input>
-          <el-button class="tag-button" type="success">添加</el-button><br>
+          <el-button @click.native="addTags" class="tag-button" type="success">添加</el-button><br>
           <el-tag
             style="margin-right: 5px"
             v-for="tag in tags"
@@ -82,33 +99,21 @@ export default {
       props: { multiple: true },
       inputTags: '',
       tags: [],
+      dialogFormVisible: false,
+      newMeta: '',
+      formLabelWidth: '120px',
       options: [{
         value: 1,
         label: '东南',
         children: [{
           value: 2,
           label: '上海',
-          children: [
-            { value: 3, label: '普陀' },
-            { value: 4, label: '黄埔' },
-            { value: 5, label: '徐汇' }
-          ]
         }, {
           value: 7,
           label: '江苏',
-          children: [
-            { value: 8, label: '南京' },
-            { value: 9, label: '苏州' },
-            { value: 10, label: '无锡' }
-          ]
         }, {
           value: 12,
           label: '浙江',
-          children: [
-            { value: 13, label: '杭州' },
-            { value: 14, label: '宁波' },
-            { value: 15, label: '嘉兴' }
-          ]
         }]
       }, {
         value: 17,
@@ -116,22 +121,17 @@ export default {
         children: [{
           value: 18,
           label: '陕西',
-          children: [
-            { value: 19, label: '西安' },
-            { value: 20, label: '延安' }
-          ]
         }, {
           value: 21,
           label: '新疆维吾尔族自治区',
-          children: [
-            { value: 22, label: '乌鲁木齐' },
-            { value: 23, label: '克拉玛依' }
-          ]
         }]
       }]
     }
   },
   methods: {
+    test(){
+      console.log("按了回车")
+    },
     goBack() {  
       this.$router.go(-1)
     },
@@ -143,8 +143,24 @@ export default {
       }
     },
     addTags() {
-      this.tags.push({name: this.inputTags, type: 'success'})
-      this.inputTags=''
+      if(this.inputTags == '')
+        return
+      let i = 0
+      for(; i < this.tags.length; i++){
+        if(this.inputTags == this.tags[i].name) {
+          this.$message({
+            message: '该标签已存在!',
+            type: "warning",
+            center: true,
+            showClose: true
+          })
+          break
+        }
+      }
+      if(i == this.tags.length) {
+        this.tags.push({name: this.inputTags, type: 'success'})
+        this.inputTags=''
+      }
     },
     closeTag(tag) {
       this.tags.splice(this.tags.indexOf(tag), 1);
