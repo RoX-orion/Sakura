@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <el-card style="margin-bottom: 40px">
-      <span>我始终坚持的精神：Open Source, Open Mind, Open Sight, Open Future!</span>
+      <span>I always adhere to the spirit: Open Source, Open Mind, Open Sight, Open Future!</span>
     </el-card>
     <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
