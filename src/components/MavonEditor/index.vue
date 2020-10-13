@@ -2,12 +2,16 @@
   <mavon-editor 
   class="mavon-editor v-note-wrapper" 
   :boxShadowStyle="boxShadowStyle"
+  ref=md
+  @change="changePost"
+  @save="savePost"
   @imgAdd="imgAdd"
   @imgDel="imgDel"/>
 </template>
 
 <script>
 import { savePost } from '@/api/article'
+import { uploadFile } from '@/api/upload'
 
 export default {
   data() {
@@ -23,8 +27,7 @@ export default {
     },
     savePost(value, render, state) { // value = MarkDown format; render = HTML format, image will change to base64
       if(this.isChange == true) {
-        const text = value
-        console.log(this.state)
+        const text = render
         savePost({text}).then(response => {
           const code = response.code
           if(code == 200){
@@ -40,7 +43,15 @@ export default {
       }
     },
     imgAdd(filename, file) {
-
+      const data = new FormData();
+      data.append('file', file);
+      uploadFile(data).then(response => {
+        const code = response.code
+        const url = response.data.url
+        if(code == 200){
+          this.$refs.md.$img2Url(filename, url)
+        }
+      })
     },
     imgDel(filename) {
 
