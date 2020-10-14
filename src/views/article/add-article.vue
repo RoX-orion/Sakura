@@ -4,7 +4,10 @@
       <el-page-header @back="goBack" content="编辑文章">
       </el-page-header>
       <el-input
+      v-model="inputTitle"
       class="title-input"
+      clearable
+      @focus="focus"
       placeholder="请输入文章标题">
       </el-input>
       <el-dropdown @command="select" style="margin-right: 20px; margin-bottom: 20px">
@@ -17,14 +20,14 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-button-group>
-        <el-button size="mini" type="primary" icon="el-icon-edit">保存草稿</el-button>
-        <el-button size="mini" type="success" icon="el-icon-share">立即发布</el-button>
-        <el-button size="mini" type="danger" icon="el-icon-delete">移至回收站</el-button>
+        <el-button size="mini" type="primary" @click.native="savePost">保存草稿<svg-icon icon-class="save"></svg-icon></el-button>
+        <el-button size="mini" type="success" @click.native="addPost">立即发布<svg-icon icon-class="release"></svg-icon></el-button>
+        <el-button size="mini" type="danger" @click.native="deletePost">移至回收站<svg-icon icon-class="delete"></svg-icon></el-button>
       </el-button-group>
     </el-card>
     <div>
       <router-view/>
-      <mavon-editor v-if="markdown"/>
+      <mavon-editor v-if="markdown" ref="mavon"/>
       <tinymce v-else/>
     </div>
     <el-card class="attribute">
@@ -99,6 +102,7 @@ export default {
       props: { multiple: true },
       inputTags: '',
       tags: [],
+      inputTitle: '',
       dialogFormVisible: false,
       newTerm: '',
       formLabelWidth: '120px',
@@ -129,8 +133,8 @@ export default {
     }
   },
   methods: {
-    test(){
-      console.log("按了回车")
+    focus() {
+
     },
     goBack() {  
       this.$router.go(-1)
@@ -164,6 +168,9 @@ export default {
     },
     closeTag(tag) {
       this.tags.splice(this.tags.indexOf(tag), 1);
+    },
+    savePost() {
+      this.$refs.mavon.savePost()
     }
   }
 }

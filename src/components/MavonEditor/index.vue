@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { savePost } from '@/api/article'
+import { savePost, addPost } from '@/api/article'
 import { uploadFile } from '@/api/upload'
 
 export default {
@@ -19,15 +19,19 @@ export default {
       isChange: false,
       boxShadowStyle: '0 2px 12px 0 rgba(0, 0, 0, 0.2)',
       state: 0,
+      md: '',
+      html: '',
     }
   },
   methods: {
     changePost(){
       this.isChange = true
     },
-    savePost(value, render, state) { // value = MarkDown format; render = HTML format, image will change to base64
+    savePost(value, render) { // value = MarkDown format; render = HTML format, image will change to base64
+      console.log(render)
       if(this.isChange == true) {
         const text = render
+        this.html = render
         savePost({text}).then(response => {
           const code = response.code
           if(code == 200){
@@ -37,9 +41,26 @@ export default {
               showClose: true,
               center: true
             })
+            this.isChange = false
           }
         })
-        this.isChange = false
+      }
+    },
+    addPost() {
+      if(this.isChange == true) {
+        const data = this.html
+        addPost(data).then(response => {
+          const code = response.code
+          if(code == 200){
+            this.$message({
+              message: '发布成功！',
+              type: 'success',
+              showClose: true,
+              center: true
+            })
+            this.isChange = false
+          }
+        })
       }
     },
     imgAdd(filename, file) {
