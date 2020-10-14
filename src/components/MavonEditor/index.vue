@@ -14,6 +14,12 @@ import { savePost, addPost } from '@/api/article'
 import { uploadFile } from '@/api/upload'
 
 export default {
+  props: {
+    title: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       isChange: false,
@@ -27,29 +33,37 @@ export default {
     changePost(){
       this.isChange = true
     },
-    savePost(value, render) { // value = MarkDown format; render = HTML format, image will change to base64
-      console.log(render)
+    savePost(value, render) { // value = MarkDown format; render = HTML format
       if(this.isChange == true) {
-        const text = render
-        this.html = render
-        savePost({text}).then(response => {
-          const code = response.code
-          if(code == 200){
-            this.$message({
-              message: '保存成功！',
-              type: 'success',
-              showClose: true,
-              center: true
-            })
-            this.isChange = false
-          }
-        })
+        if(this.title != ''){
+          const text = render
+          this.html = render
+          savePost({text}).then(response => {
+            const code = response.code
+            if(code == 200){
+              this.$message({
+                message: '保存成功！',
+                type: 'success',
+                showClose: true,
+                center: true
+              })
+              this.isChange = false
+            }
+          })
+        } else {
+          this.$message({
+            message: '请输入文章标题！',
+            type: 'warning',
+            showClose: true,
+            center: true
+          })
+        }
       }
     },
     addPost() {
-      if(this.isChange == true) {
+      if(this.isChange == false && this.html != '') {
         const data = this.html
-        addPost(data).then(response => {
+        addPost({data}).then(response => {
           const code = response.code
           if(code == 200){
             this.$message({
@@ -58,8 +72,14 @@ export default {
               showClose: true,
               center: true
             })
-            this.isChange = false
           }
+        })
+      } else {
+        this.$message({
+          message: '请先保存文档！',
+          type: 'warning',
+          showClose: true,
+          center: true
         })
       }
     },

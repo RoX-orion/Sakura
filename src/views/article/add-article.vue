@@ -27,7 +27,7 @@
     </el-card>
     <div>
       <router-view/>
-      <mavon-editor v-if="markdown" ref="mavon"/>
+      <mavon-editor v-if="markdown" ref="mavon" :title="inputTitle"/>
       <tinymce v-else/>
     </div>
     <el-card class="attribute">
@@ -171,6 +171,9 @@ export default {
     },
     savePost() {
       this.$refs.mavon.savePost()
+    },
+    addPost() {
+      this.$refs.mavon.addPost()
     }
   }
 }
