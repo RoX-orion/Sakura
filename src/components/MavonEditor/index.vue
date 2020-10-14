@@ -36,9 +36,11 @@ export default {
     savePost(value, render) { // value = MarkDown format; render = HTML format
       if(this.isChange == true) {
         if(this.title != ''){
-          const text = render
+          const content = render
+          const title = this.title
           this.html = render
-          savePost({text}).then(response => {
+          console.log(this.title)
+          savePost({content, title}).then(response => {
             const code = response.code
             if(code == 200){
               this.$message({
@@ -62,8 +64,9 @@ export default {
     },
     addPost() {
       if(this.isChange == false && this.html != '') {
-        const data = this.html
-        addPost({data}).then(response => {
+        const content = this.html
+        const title = this.title
+        addPost({content, title}).then(response => {
           const code = response.code
           if(code == 200){
             this.$message({

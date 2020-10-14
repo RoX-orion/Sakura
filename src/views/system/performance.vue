@@ -9,9 +9,6 @@
           </el-table>
         </el-card>
       </el-col>
-      <!-- <el-col :xs="0" :sm="2">
-        <p></p>
-      </el-col> -->
       <el-col :xs="24" :sm="12" style="margin-bottom: 20px">
         <el-card v-bind="systemLiveInfo">
           <label>内存</label>
@@ -32,8 +29,8 @@
           <div style="font-size: 20px;">进程</div>
           <hr>
           <el-table :data="processTableData" style="width: 100%">
-            <el-table-column prop="processPID" label="进程PID"></el-table-column>
-            <el-table-column prop="processUptime" label="运行时间"></el-table-column>
+            <el-table-column prop="processPID" width="90" label="进程PID"></el-table-column>
+            <el-table-column prop="processUptime" width="180" label="运行时间"></el-table-column>
             <el-table-column prop="processCpuUsed" label="进程CPU使用率"></el-table-column>
             <el-table-column prop="cpuCount" label="CPU核心数"></el-table-column>
           </el-table>
