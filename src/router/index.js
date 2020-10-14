@@ -71,6 +71,12 @@ export const constantRoutes = [
         name: 'AddArticle',
         component: () => import('@/views/article/add-article'),
         meta: { title: '写文章' }
+      },
+      {
+        path: 'term',
+        name: 'Term',
+        component: () => import('@/views/article/term'),
+        meta: { title: '分类目录' }
       }
     ]
   },
