@@ -1,7 +1,7 @@
 {
-  "name": "vue-admin-template",
+  "name": "cloudrox-admin",
   "version": "4.4.0",
-  "description": "A vue admin template with Element UI & axios & iconfont & permission control & lint",
+  "description": "a vue admin page of website",
   "author": "Pan <panfree23@gmail.com>",
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -63,5 +63,5 @@
     "node": ">=8.9",
     "npm": ">= 3.0.0"
   },
-  "license": "MIT"
+  "license": "Apache v2"
 }
