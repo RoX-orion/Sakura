@@ -2,7 +2,6 @@
   "name": "cloudrox-admin",
   "version": "4.4.0",
   "description": "a vue admin page of website",
-  "author": "Pan <panfree23@gmail.com>",
   "scripts": {
     "dev": "vue-cli-service serve",
     "build:prod": "vue-cli-service build",

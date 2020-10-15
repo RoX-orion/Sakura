@@ -15,3 +15,18 @@ export function savePost(data) {
     data
   })
 }
+
+export function addTerm(data) {
+  return request({
+    url: 'api/addTerm',
+    method: 'post',
+    data
+  })
+}
+
+export function selectTerm() {
+  return request({
+    url: 'api/selectTerm',
+    method: 'post',
+  })
+}
