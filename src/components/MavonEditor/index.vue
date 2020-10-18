@@ -11,7 +11,7 @@
 
 <script>
 import { savePost, addPost } from '@/api/article'
-import { uploadFile } from '@/api/upload'
+import { uploadFile } from '@/api/file'
 
 export default {
   props: {

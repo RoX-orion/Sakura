@@ -10,3 +10,10 @@ export function uploadFile(data) {
     data
   })
 }
+
+export function getFileList() {
+  return request({
+    url: 'api/getFileList',
+    method: 'post'
+  })
+}

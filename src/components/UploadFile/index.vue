@@ -19,7 +19,7 @@
 
 <script>
 import { getToken } from '@/utils/auth'
-import { uploadFile } from '@/api/upload'
+import { uploadFile } from '@/api/file'
 
 export default {
   name: 'UploadFile',
