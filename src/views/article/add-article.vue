@@ -20,7 +20,7 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-button-group>
-        <el-button size="mini" type="primary" @click.native="savePost">保存草稿<svg-icon icon-class="save"></svg-icon></el-button>
+        <el-button size="mini" type="primary" @click.native="addMedia">添加媒体<svg-icon icon-class="add"></svg-icon></el-button>
         <el-button size="mini" type="success" @click.native="addPost">立即发布<svg-icon icon-class="release"></svg-icon></el-button>
         <el-button size="mini" type="danger" @click.native="deletePost">移至回收站<svg-icon icon-class="delete"></svg-icon></el-button>
       </el-button-group>
@@ -169,8 +169,8 @@ export default {
     closeTag(tag) {
       this.tags.splice(this.tags.indexOf(tag), 1);
     },
-    savePost() {
-      this.$refs.mavon.savePost()
+    addMedia() {
+      console.log("add media")
     },
     addPost() {
       this.$refs.mavon.addPost()
