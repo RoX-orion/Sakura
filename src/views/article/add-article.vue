@@ -84,17 +84,26 @@
         </el-collapse-item>
       </el-collapse>
     </el-card>
+    <el-dialog title="选择媒体文件" :visible.sync="dialogSelectFile" width="90%">
+      <select-file/>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogSelectFile = false">取 消</el-button>
+        <el-button type="primary" @click="dialogSelectFile = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import MavonEditor from '@/components/MavonEditor'
 import Tinymce from '@/components/Tinymce'
+import SelectFile from '@/components/SelectFile'
 
 export default {
   components: {
     MavonEditor,
-    Tinymce
+    Tinymce,
+    SelectFile
   },
   data() {
     return {
@@ -103,6 +112,7 @@ export default {
       inputTags: '',
       tags: [],
       inputTitle: '',
+      dialogSelectFile: false,
       dialogFormVisible: false,
       newTerm: '',
       formLabelWidth: '120px',
@@ -170,7 +180,7 @@ export default {
       this.tags.splice(this.tags.indexOf(tag), 1);
     },
     addMedia() {
-      console.log("add media")
+      this.dialogSelectFile = true
     },
     addPost() {
       this.$refs.mavon.addPost()

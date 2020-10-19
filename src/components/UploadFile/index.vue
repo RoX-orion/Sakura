@@ -33,6 +33,7 @@ export default {
       const data = new FormData()
       data.append('file', param.file)
       uploadFile(data).then(response =>{
+        const data = response.data
         const code = response.code
         if(code == 200){
           this.$message({
@@ -42,6 +43,7 @@ export default {
             type: 'success'
           })
           this.$refs['upload'].clearFiles()
+          this.$emit('uploadSuccess', data.data)
         }
       })
     },

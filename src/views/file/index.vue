@@ -6,18 +6,16 @@
       :direction="direction"
       >
       <div>
-        <upload-file/>
+        <b style="padding: 10px">上传过程中不要关闭此窗口，否则上传失败!</b>
+        <upload-file @uploadSuccess="success"/>
       </div>
     </el-drawer>
-    
+    <div style="margin-bottom: 20px">
+      <el-button type="primary" size="medium" @click="drawer = true">上传文件<i class="el-icon-upload el-icon--right"></i></el-button>
+      <el-button type="danger" size="medium">删除文件<svg-icon icon-class="delete"></svg-icon></el-button>
+      <el-button type="success" size="medium">下载文件<svg-icon icon-class="download"></svg-icon></el-button>
+    </div>
     <el-row :gutter="30">
-      <el-col :lg="24">
-        <div style="margin-bottom: 20px">
-          <el-button type="primary" size="medium" @click="drawer = true">上传文件<i class="el-icon-upload el-icon--right"></i></el-button>
-          <el-button type="danger" size="medium">删除文件<svg-icon icon-class="delete"></svg-icon></el-button>
-          <el-button type="success" size="medium">下载文件<svg-icon icon-class="download"></svg-icon></el-button>
-        </div>
-      </el-col>
       <el-col :lg="4" :md="6" :sm="6" :xs="12"
         class="repo"
         v-for="item in fileList" 
@@ -31,7 +29,7 @@
         <div class="filename">{{item.name}}</div>
       </el-col>
     </el-row>
-    <el-dialog :visible.sync="dialogVisible" width="90%" :v-bind="detailedData">
+    <el-dialog :visible.sync="dialogVisible" width="90%" :v-bind="detailedData" append-to-body>
       <el-row :gutter="20">
         <el-col :lg="15">
           <el-image
@@ -93,6 +91,10 @@ export default {
       } else {
         this.storagePos = '对象存储'
       }
+    },
+    success(value) {
+      this.fileList.push(value)
+      // console.log(value)
     }
   }
 }
