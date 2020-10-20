@@ -17,3 +17,11 @@ export function getFileList() {
     method: 'post'
   })
 }
+
+export function deleteFile(data) {
+  return request({
+    url: 'api/deleteFile',
+    method: 'post',
+    data
+  })
+}

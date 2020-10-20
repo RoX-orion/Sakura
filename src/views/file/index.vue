@@ -19,13 +19,11 @@
       <el-col :lg="4" :md="6" :sm="6" :xs="12"
         class="repo"
         v-for="item in fileList" 
-        :key="item.url">
+        :key="item.id">
         <el-button class="img" @click="detailed(item)">
-          <el-image
-            class="list"
-            :src="item.url">
-          </el-image>
+          <img class="list" :src="item.url">
         </el-button>
+        <input type="checkbox" @click="test(item)"/>
         <div class="filename">{{item.name}}</div>
       </el-col>
     </el-row>
@@ -44,6 +42,8 @@
             <div class="attribute">文件大小: {{detailedData.fileSize}}</div>
             <div class="attribute">存储位置: {{storagePos}}</div>
             <el-input :value="detailedData.url"></el-input>
+            <el-button size="small" type="primary" style="margin-top: 5px">复制链接</el-button>
+            <el-button size="small" type="danger" style="margin-top: 5px" @click="deleteFile(detailedData)">永久删除</el-button>
           </div>
         </el-col>
       </el-row>
@@ -53,7 +53,7 @@
 
 <script>
 import UploadFile from '@/components/UploadFile'
-import { getFileList } from '@/api/file'
+import { getFileList, deleteFile } from '@/api/file'
 
 export default {
   components: {
@@ -93,8 +93,27 @@ export default {
       }
     },
     success(value) {
-      this.fileList.push(value)
-      // console.log(value)
+      for(let i = this.fileList.length; i>=0; i--){
+        this.fileList[i] = this.fileList[i-1];
+      }
+      this.fileList[0] = value
+    },
+    test(data) {
+      console.log(data.url)
+    },
+    deleteFile(data) {
+      deleteFile(data).then(response =>{
+        const code = response.code
+        if(code == 200){
+          this.$message({
+            message: '删除成功!',
+            center: true,
+            showClose: true,
+            type: 'success'
+          })
+          this.dialogVisible = false
+        }
+      })
     }
   }
 }

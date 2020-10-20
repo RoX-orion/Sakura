@@ -94,8 +94,12 @@ export default {
         this.storagePos = '对象存储'
       }
     },
-    success() {
-      console.log("2323")
+    success(value) {
+      for(let i = this.fileList.length; i>=0; i--){
+        this.fileList[i] = this.fileList[i-1];
+      }
+      this.fileList[0] = value
+      this.active = 'select'
     }
   }
 }
