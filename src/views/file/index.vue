@@ -42,7 +42,7 @@
             <div class="attribute">文件大小: {{detailedData.fileSize}}</div>
             <div class="attribute">存储位置: {{storagePos}}</div>
             <el-input :value="detailedData.url"></el-input>
-            <el-button size="small" type="primary" style="margin-top: 5px">复制链接</el-button>
+            <el-button size="small" type="primary" style="margin-top: 5px" @click="copyUrl(detailedData.url)">复制链接</el-button>
             <el-button size="small" type="danger" style="margin-top: 5px" @click="deleteFile(detailedData)">永久删除</el-button>
           </div>
         </el-col>
@@ -114,6 +114,20 @@ export default {
           this.dialogVisible = false
         }
       })
+    },
+    copyUrl(url) {
+      const copyElement = document.createElement('input');
+      copyElement.value = url;
+      document.body.appendChild(copyElement);
+      copyElement.select();
+      document.execCommand("Copy");
+      this.$message({
+        message: '复制链接成功!',
+        showClose: true,
+        center: true,
+        type: 'success'
+      })
+      copyElement.style.display = 'none'
     }
   }
 }

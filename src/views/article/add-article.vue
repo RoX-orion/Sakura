@@ -16,7 +16,7 @@
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="rte">富文本编辑器</el-dropdown-item>
-          <el-dropdown-item command="markdown">MarkDown编辑器</el-dropdown-item>
+          <el-dropdown-item command="markdown" ref="md">MarkDown编辑器</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <el-button-group>
@@ -85,11 +85,7 @@
       </el-collapse>
     </el-card>
     <el-dialog title="选择媒体文件" :visible.sync="dialogSelectFile" width="90%">
-      <select-file/>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogSelectFile = false">取 消</el-button>
-        <el-button type="primary" @click="dialogSelectFile = false">确 定</el-button>
-      </div>
+      <select-file @add="addImg"/>
     </el-dialog>
   </div>
 </template>
@@ -184,6 +180,10 @@ export default {
     },
     addPost() {
       this.$refs.mavon.addPost()
+    },
+    addImg(data) {
+      this.$refs.mavon.addImgFromRepo(data.name, data.url)
+      this.dialogSelectFile = false
     }
   }
 }

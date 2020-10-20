@@ -3,6 +3,7 @@
   class="mavon-editor v-note-wrapper" 
   :boxShadowStyle="boxShadowStyle"
   ref=md
+  v-model="input"
   @change="changePost"
   @save="savePost"
   @imgAdd="imgAdd"
@@ -27,6 +28,7 @@ export default {
       state: 0,
       md: '',
       html: '',
+      input: ''
     }
   },
   methods: {
@@ -39,7 +41,6 @@ export default {
           const content = render
           const title = this.title
           this.html = render
-          console.log(this.title)
           savePost({content, title}).then(response => {
             const code = response.code
             if(code == 200){
@@ -99,6 +100,10 @@ export default {
     },
     imgDel(filename) {
 
+    },
+    addImgFromRepo(name, url) {
+      const img = '![' + name + '](' + url + ')'
+      this.input += img
     }
   }
 }
