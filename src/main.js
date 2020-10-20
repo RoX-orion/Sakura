@@ -18,15 +18,6 @@ import '@/permission' // permission control
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 
-import VueLazyload from 'vue-lazyload'
- 
-Vue.use(VueLazyload, {
-  preLoad: 1.3,
-  attempt: 1,
-  // the default is ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend']
-  listenEvents: [ 'scroll' ]
-})
-
 Vue.use(mavonEditor)
 
 /**

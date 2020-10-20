@@ -28,7 +28,7 @@ export default {
       state: 0,
       md: '',
       html: '',
-      input: ''
+      input: 'MarkDown编辑器插入图片样式无解，别用了'
     }
   },
   methods: {

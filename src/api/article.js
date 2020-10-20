@@ -8,6 +8,13 @@ export function addPost(data) {
   })
 }
 
+export function getPostList() {
+  return request({
+    url: 'api/getPostList',
+    method: 'post'
+  })
+}
+
 export function savePost(data) {
   return request({
     url: 'api/savePost',
