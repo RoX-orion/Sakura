@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { addTerm, selectTerm } from '@/api/article'
+import { addTerm, getTerm } from '@/api/post'
 
 export default {
   data() {
@@ -86,8 +86,8 @@ export default {
       this.dialogFormVisible = false
       console.log(this.form.region)
     },
-    selectTerm() {
-      selectTerm().then(response => {
+    getTerm() {
+      getTerm().then(response => {
         const data = response.data.list
         // let j = 0;
         // let k = 0;

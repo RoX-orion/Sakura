@@ -5,7 +5,6 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-import { addArticle } from '@/api/article'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -56,26 +55,26 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/article',
+    path: '/post',
     component: Layout,
-    meta: { title: '文章管理', icon: 'article' },
+    meta: { title: '文章管理', icon: 'post' },
     children: [
       {
-        path: 'all-article',
-        name: 'AllArticle',
-        component: () => import('@/views/article/all-article'),
+        path: 'all-post',
+        name: 'AllPost',
+        component: () => import('@/views/post/all-post'),
         meta: { title: '所有文章' }
       },
       {
-        path: 'add-article',
-        name: 'AddArticle',
-        component: () => import('@/views/article/add-article'),
+        path: 'add-post',
+        name: 'AddPost',
+        component: () => import('@/views/post/add-post'),
         meta: { title: '写文章' }
       },
       {
         path: 'term',
         name: 'Term',
-        component: () => import('@/views/article/term'),
+        component: () => import('@/views/post/term'),
         meta: { title: '分类目录' }
       }
     ]
@@ -151,12 +150,6 @@ export const constantRoutes = [
         meta: { title: 'MarkDown编辑器' }
       },
       {
-        path: 'backToTop',
-        name: 'BackToTop',
-        component: () => import('@/views/components/back-to-top'),
-        meta: {  title: '返回顶部'}
-      },
-      {
         path: 'card',
         name: 'Card',
         component: () => import('@/views/components/card'),
@@ -188,28 +181,6 @@ export const constantRoutes = [
   },
 
   {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
     path: '/form',
     component: Layout,
     children: [
@@ -218,65 +189,6 @@ export const constantRoutes = [
         name: 'Form',
         component: () => import('@/views/form/index'),
         meta: { title: '表单', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
       }
     ]
   },

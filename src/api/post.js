@@ -2,38 +2,42 @@ import request from '@/utils/request'
 
 export function addPost(data) {
   return request({
-    url: 'api/addPost',
+    url: 'post',
     method: 'post',
     data
   })
 }
 
-export function getPostList() {
+export function getPostList(data) {
   return request({
-    url: 'api/getPostList',
-    method: 'post'
+    url: 'postList',
+    method: 'get',
+    params: {
+      page: data.page,
+      count: data.count
+    }
   })
 }
 
 export function savePost(data) {
   return request({
-    url: 'api/savePost',
-    method: 'post',
+    url: 'post',
+    method: 'put',
     data
   })
 }
 
 export function addTerm(data) {
   return request({
-    url: 'api/addTerm',
+    url: 'addTerm',
     method: 'post',
     data
   })
 }
 
-export function selectTerm() {
+export function getTerm() {
   return request({
-    url: 'api/selectTerm',
-    method: 'post',
+    url: 'getTerm',
+    method: 'get',
   })
 }

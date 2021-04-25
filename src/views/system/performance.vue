@@ -117,7 +117,6 @@ import { getSysInfo, getDatabaseLiveInfo, getProcessInfo, getThreadInfo } from '
 import CPULineChart from './components/CPULineChart'
 import MemLineChart from './components/MemLineChart'
 import { getToken } from '@/utils/auth'
-import { parse } from 'path-to-regexp'
 import { sendWebsocket, closeWebsocket, initWebSocket } from '@/utils/websocket'
 
 const lineChartData = {
@@ -285,7 +284,7 @@ export default {
         userName: 'xxxxxxxxxx'
       }
       // sendWebsocket('ws://123.56.236.23:8888/liveInfo/555', obj, this.wsMessage, this.wsError)
-      sendWebsocket('ws://localhost:8888/liveInfo/555', obj, this.wsMessage, this.wsError)
+      // sendWebsocket('ws://localhost:9999/liveInfo/555', obj, this.wsMessage, this.wsError)
     },
     systemInfo(token){
       getSysInfo(token).then( response => {

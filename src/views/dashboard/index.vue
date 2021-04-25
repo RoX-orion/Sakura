@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-container">
-    <el-card style="margin-bottom: 40px">
+    <!-- <el-card style="margin-bottom: 40px">
       <span>I always adhere to the spirit: Open Source, Open Mind, Open Sight, Open Future!</span>
-    </el-card>
+    </el-card> -->
     <el-row :gutter="40" class="panel-group">
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
@@ -73,7 +73,7 @@
         </el-card>
       </el-col>
 
-      <el-col :xs="24" :md="12" :lg="12">
+      <!-- <el-col :xs="24" :md="12" :lg="12">
         <el-card>
           <div align="center" style="margin-bottom: 15px"><b>如果您觉得此项目对您有帮助，可以请作者喝杯咖啡</b></div>
           <el-row>
@@ -87,7 +87,7 @@
             </el-col>
           </el-row>
         </el-card>
-      </el-col>
+      </el-col> -->
       <el-col>
 
       </el-col>

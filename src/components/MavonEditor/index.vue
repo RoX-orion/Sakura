@@ -11,8 +11,9 @@
 </template>
 
 <script>
-import { savePost, addPost } from '@/api/article'
+import { savePost, addPost } from '@/api/post'
 import { uploadFile } from '@/api/file'
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -30,6 +31,11 @@ export default {
       html: '',
       input: 'MarkDown编辑器插入图片样式无解，别用了'
     }
+  },
+  computed: {
+    ...mapGetters([
+      'name',
+    ])
   },
   methods: {
     changePost(){
@@ -67,7 +73,8 @@ export default {
       if(this.isChange == false && this.html != '') {
         const content = this.html
         const title = this.title
-        addPost({content, title}).then(response => {
+        const username = this.name
+        addPost({content, title, username}).then(response => {
           const code = response.code
           if(code == 200){
             this.$message({

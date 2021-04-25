@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function uploadFile(data) {
   return request({
-    url: 'api/uploadFile',
+    url: 'uploadFile',
     method: 'post',
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -13,14 +13,14 @@ export function uploadFile(data) {
 
 export function getFileList() {
   return request({
-    url: 'api/getFileList',
+    url: 'getFileList',
     method: 'post'
   })
 }
 
 export function deleteFile(data) {
   return request({
-    url: 'api/deleteFile',
+    url: 'deleteFile',
     method: 'post',
     data
   })

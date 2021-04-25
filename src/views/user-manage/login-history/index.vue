@@ -3,15 +3,13 @@
     <el-card class="box-card">
       <el-table 
         :data="tableData"
-        style="width: 100%"
-      >
+        style="width: 100%">
         <el-table-column label="序号" type="index" :index="getIndex"></el-table-column>
         <el-table-column label="用户名" prop="username"></el-table-column>
         <el-table-column label="登录时间" prop="loginDate"></el-table-column>
         <el-table-column label="设备" prop="os"></el-table-column>
         <el-table-column label="浏览器(内核)" prop="browser"></el-table-column>
-        <el-table-column label="真实IP" prop="realIP"></el-table-column>
-        <el-table-column label="代理IP" prop="proxyIP"></el-table-column>
+        <el-table-column label="IP地址" prop="ip"></el-table-column>
         <el-table-column label="备注" prop="remarks">无</el-table-column>
         <el-table-column align="right">
           <template slot="header" slot-scope="scope">
@@ -54,19 +52,16 @@ export default {
       search: "",
     };
   },
-  computed: {
-    
-  },
   mounted() {
     this.getLoginHistory(this.page);
   },
   methods: {
     getLoginHistory(page) {
-      const offset = (page - 1) * this.size
       const count = this.size
-      getLoginHistory({offset, count}).then((response) => {
-        this.tableData = response.data
-        this.total = response.total
+      getLoginHistory({count, page}).then(response => {
+        const { data } = response
+        this.tableData = data.list
+        this.total = data.total
       });
     },
     changePage(page) {

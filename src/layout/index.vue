@@ -12,7 +12,7 @@
       <right-panel v-if="true">
         <settings />
       </right-panel>
-      <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
+       <el-backtop></el-backtop>
     </div>
   </div>
 </template>

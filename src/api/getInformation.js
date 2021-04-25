@@ -2,29 +2,32 @@ import request from '@/utils/request'
 
 export function getLoginHistory(data){
     return request ({
-        url: 'api/login-history',
-        method: 'post',
-        data
+        url: 'login-history',
+        method: 'get',
+        params: {
+          count: data.count,
+          page: data.page
+        }
     })
 }
 
 export function getSysInfo(){
     return request({
-      url: 'api/system',
+      url: 'system',
       method: 'get'
     })
   }
   
   export function getStaticInfo(){
     return request({
-      url: 'api/getStaticInfo',
-      method: 'post'
+      url: 'staticInfo',
+      method: 'get'
     })
   }
   
   export function getDatabaseLiveInfo(data){
     return request({
-      url: 'api/getDatabaseLiveInfo',
+      url: 'getDatabaseLiveInfo',
       method: 'post',
       data
     })
@@ -32,7 +35,7 @@ export function getSysInfo(){
   
   export function getProcessInfo() {
     return request({
-      url: 'api/getProcessInfo',
+      url: 'getProcessInfo',
       method: 'post'
     })
   }
